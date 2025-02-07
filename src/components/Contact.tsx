@@ -1,5 +1,9 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 
+// Define the event types
+type FormInputEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -9,10 +13,18 @@ const Contact = () => {
     message: ''
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormSubmitEvent) => {
     e.preventDefault();
     // Add form submission logic here
     console.log(formData);
+  };
+
+  const handleChange = (e: FormInputEvent) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
@@ -24,39 +36,44 @@ const Contact = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <input
                 type="text"
+                name="firstName"
                 placeholder="First Name"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={handleChange}
               />
               <input
                 type="text"
+                name="lastName"
                 placeholder="Last Name"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={handleChange}
               />
             </div>
             <input
               type="email"
+              name="email"
               placeholder="Email"
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={handleChange}
             />
             <input
               type="text"
+              name="subject"
               placeholder="Subject"
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
               value={formData.subject}
-              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+              onChange={handleChange}
             />
             <textarea
+              name="message"
               placeholder="Message"
               rows={6}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              onChange={handleChange}
             />
             <button
               type="submit"
